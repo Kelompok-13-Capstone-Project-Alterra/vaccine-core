@@ -1,0 +1,85 @@
+Table M_USERS {
+  id int [pk, increment]
+  nik varchar(16)
+  email varchar(50)
+  password varchar(50)
+  name varchar(50)
+  family_id int [ref: > M_FAMILIES.id]
+  longitude double
+  latitude double
+  created_at timestamp
+  updated_at timestamp
+  deleted_at timestamp
+}
+
+Table M_FAMILIES {
+  id int [pk, increment]
+  owner int [ref: - M_USERS.id]
+  created_at timestamp
+  updated_at timestamp
+  deleted_at timestamp
+}
+
+Table M_HEALTH_FACILITIES {
+  id int [pk, increment]
+  created_by int [ref: > M_USERS.id]
+  longitude double
+  latitude double
+  created_at timestamp
+  updated_at timestamp
+  deleted_at timestamp
+}
+
+Table M_HEALTH_FACILITIES_VACCINES {
+  health_facility_id int [ref: > M_HEALTH_FACILITIES.id]
+  vaccine_id int [ref: > M_VACCINE.id]
+  stock int
+  updated_at timestamp
+}
+
+Table T_VACCINE_DISTRIBUTION {
+  health_facility_id int [ref: > M_HEALTH_FACILITIES.id]
+  vaccine_id int [ref: > M_VACCINE.id]
+  vaccination_session_id int [ref: > M_VACCINATION_SESSIONS.id]
+  in int
+  out int
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table M_ADMINS {
+  user_id int [pk, ref: > M_USERS.id]
+  health_facility_id int [pk, ref: > M_HEALTH_FACILITIES.id]
+}
+
+Table M_VACCINATION_SESSIONS {
+  id int pk
+  health_facility_id int [ref: > M_HEALTH_FACILITIES.id]
+  vaccine_id int [ref: > M_VACCINE.id]
+  schedule_start timestamp
+  schedule_end timestamp
+  booking_start timestamp
+  booking_end timestamp
+  quantity int
+  booked int
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table M_VACCINE {
+  id int [pk, increment]
+  name varchar(255)
+  created_at timestamp
+  updated_at timestamp
+  deleted_at timestamp
+}
+
+Table T_VACCINATION_PASS {
+  id int pk
+  vaccination_session_id int [ref: > M_VACCINATION_SESSIONS.id]
+  user_id int [ref: > M_USERS.id]
+  schedule_start timestamp
+  schedule_end timestamp
+  created_at timestamp
+  updated_at timestamp
+}
