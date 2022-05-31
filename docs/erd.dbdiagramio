@@ -14,6 +14,17 @@ Table M_USERS {
   deleted_at timestamp
 }
 
+Table M_ADMINS {
+  id int [pk, increment]
+  name varchar(100)
+  username varchar(100)
+  password varchar(100)
+  is_super_admin boolean
+  created_at timestamp
+  updated_at timestamp
+  deleted_at timestamp
+}
+
 Table M_CITIES {
   id int pk
   name varchar(50)
@@ -22,9 +33,19 @@ Table M_CITIES {
   deleted_at timestamp
 }
 
+Table M_NEWS {
+  id int pk
+  title varchar(100)
+  description text
+  content text
+  created_by int [ref: > M_ADMINS.id]
+  created_at timestamp
+  updated_at timestamp
+}
+
 Table M_HEALTH_FACILITIES {
   id int [pk, increment]
-  created_by int [ref: > M_USERS.id]
+  managed_by int [ref: > M_ADMINS.id]
   city_id int [ref: > M_CITIES.id]
   created_at timestamp
   updated_at timestamp
@@ -48,19 +69,12 @@ Table T_VACCINE_DISTRIBUTION {
   updated_at timestamp
 }
 
-Table M_ADMINS {
-  user_id int [pk, ref: > M_USERS.id]
-  health_facility_id int [pk, ref: > M_HEALTH_FACILITIES.id]
-}
-
 Table M_VACCINATION_SESSIONS {
   id int pk
   health_facility_id int [ref: > M_HEALTH_FACILITIES.id]
   vaccine_id int [ref: > M_VACCINE.id]
   schedule_start timestamp
   schedule_end timestamp
-  booking_start timestamp
-  booking_end timestamp
   quantity int
   booked int
   created_at timestamp
@@ -77,11 +91,13 @@ Table M_VACCINE {
 
 Table M_FAMILY_MEMBERS {
   id int
+  // who's member family is this
   user_id int [ref: > M_USERS.id]
   nik varchar(16)
   name varchar(50)
   date_of_birth date
   gender char(1)
+  relationship string
   created_at timestamp
   updated_at timestamp
 }
@@ -91,8 +107,40 @@ Table T_VACCINATION_PASS {
   vaccination_session_id int [ref: > M_VACCINATION_SESSIONS.id]
   registered_by int [ref: > M_USERS.id]
   family_member_id int [ref: > M_FAMILY_MEMBERS.id]
-  schedule_start timestamp
-  schedule_end timestamp
+  vaccine_id int [ref: > M_VACCINE.id]
+
+  dose int
+
+  nik varchar(16)
+  name varchar(50)
+  date_of_birth date
+  gender char(1)
+  phone_number varchar(20)
+  landline_phone varchar(20)
+  email varchar(50)
+
+  // is this person attend and get vaccinated
+  is_vaccinated boolean
+  medical_history text
+  is_pregnant boolean
+
+  // address information from ID card
+  id_address address
+  // "Kelurahan" in Indonesian
+  id_urban_village varchar(5)
+  // "Kecamatan" in Indonesian
+  id_sub_district varchar(5)
+  id_city varchar(20)
+  id_province varchar(20)
+
+  // current address information
+  curr_address address
+  // "Kelurahan" in Indonesian
+  curr_urban_village varchar(5)
+  // "Kecamatan" in Indonesian
+  curr_sub_district varchar(5)
+  curr_city varchar(20)
+  curr_province varchar(20)
   created_at timestamp
   updated_at timestamp
 }
