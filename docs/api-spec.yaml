@@ -1,0 +1,600 @@
+openapi: 3.0.0
+info:
+  title: Evizy
+  description: Evizy API documentation
+  version: 1.0.0-SNAPSHOT
+servers:
+  - url: http://localhost:8080/api/
+    description: Development
+  - url: http://127.0.0.1/api/
+    description: SIT
+paths:
+  /v1/auth/register:
+    post:
+      summary: Register a new user
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Users'
+            examples:
+              success:
+                summary: Success
+                value:
+                  nik: 1234567890123456
+                  password: mypassword
+      responses:
+        '200':
+          description: Success register
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                success:
+                  summary: Success
+                  value:
+                    timestamp: '26-03-2022 14:00:10'
+                    status:
+                      code: SUCCESS
+                      message: Success!
+                    data:
+                      access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                      refresh_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwicmVmcmVzaCI6MTExMX0.Qp-Vs98Wov0ZhidB3DInAhAY_SyDINqUt6G6XJpiojc"
+        '500':
+          description: Unknown error when register
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                unknown_error:
+                  summary: Unknown Error
+                  value:
+                    timestamp: '26-03-2022 14:00:10'
+                    status:
+                      code: UNKNOWN_ERROR
+                      message: Happened unknown error!
+                    data: null
+  /v1/auth/login:
+    post:
+      summary: Login user
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Users'
+            examples:
+              success:
+                summary: Success
+                value:
+                  nik: 1234567890123456
+                  password: mypassword
+      responses:
+        '200':
+          description: Success Login
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                success:
+                  summary: Success
+                  value:
+                    timestamp: '26-03-2022 14:00:10'
+                    status:
+                      code: SUCCESS
+                      message: Success!
+                    data:
+                      access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                      refresh_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwicmVmcmVzaCI6MTExMX0.Qp-Vs98Wov0ZhidB3DInAhAY_SyDINqUt6G6XJpiojc"
+        '500':
+          description: Unknown error when login
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                unknown_error:
+                  summary: Unknown Error
+                  value:
+                    timestamp: '26-03-2022 14:00:10'
+                    status:
+                      code: UNKNOWN_ERROR
+                      message: Happened unknown error!
+                    data: null
+  /v1/admin/login:
+    post:
+      summary: Login Admin
+      tags:
+        - Admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Admin'
+            examples:
+              success:
+                summary: Success
+                value:
+                  username: admin1
+                  password: mypassword
+      responses:
+        '200':
+          description: Success Login
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                success:
+                  summary: Success
+                  value:
+                    timestamp: '26-03-2022 14:00:10'
+                    status:
+                      code: SUCCESS
+                      message: Success!
+                    data:
+                      access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                      refresh_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwicmVmcmVzaCI6MTExMX0.Qp-Vs98Wov0ZhidB3DInAhAY_SyDINqUt6G6XJpiojc"
+                      is_super_admin: true
+                      name: admin1
+        '500':
+          description: Unknown error when login
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                unknown_error:
+                  summary: Unknown Error
+                  value:
+                    timestamp: '26-03-2022 14:00:10'
+                    status:
+                      code: UNKNOWN_ERROR
+                      message: Happened unknown error!
+                    data: null
+  /v1/admin:
+    post:
+      security:
+        - bearerAuth: []
+      summary: Create a new Admin
+      tags:
+        - Admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Admin'
+            examples:
+              success:
+                summary: Success
+                value:
+                  username: admin1
+                  password: mypassword
+      responses:
+        '200':
+          description: Success Create a new Admin
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                success:
+                  summary: Success
+                  value:
+                    timestamp: '26-03-2022 14:00:10'
+                    status:
+                      code: SUCCESS
+                      message: Success!
+                    data:
+                      id: 1
+                      username: admin1
+                      is_super_admin: false
+        '500':
+          description: Unknown error when login
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                unknown_error:
+                  summary: Unknown Error
+                  value:
+                    timestamp: '26-03-2022 14:00:10'
+                    status:
+                      code: UNKNOWN_ERROR
+                      message: Happened unknown error!
+                    data: null
+    get:
+      security:
+        - bearerAuth: []
+      summary: Get Admin Info
+      tags:
+        - Admin
+      responses:
+        '200':
+          description: Find an admin
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                success:
+                  summary: Success
+                  value:
+                    timestamp: '26-03-2022 14:00:10'
+                    status:
+                      code: SUCCESS
+                      message: Success!
+                    data: null
+        '500':
+          description: Unknown error when login
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                unknown_error:
+                  summary: Unknown Error
+                  value:
+                    timestamp: '26-03-2022 14:00:10'
+                    status:
+                      code: UNKNOWN_ERROR
+                      message: Happened unknown error!
+                    data: [
+                      {
+                        id: 1,
+                        username: admin1,
+                        is_super_admin: false
+                      }
+                    ]
+  /v1/admin/{adminId}:
+    delete:
+      parameters:
+        - in: path
+          name: adminId
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the admin to delete
+      security:
+        - bearerAuth: []
+      summary: Delete an admin
+      tags:
+        - Admin
+      responses:
+        '200':
+          description: Delete an admin
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                success:
+                  summary: Success
+                  value:
+                    timestamp: '26-03-2022 14:00:10'
+                    status:
+                      code: SUCCESS
+                      message: Success!
+                    data:
+                      id: 1
+                      username: admin1
+                      is_super_admin: false
+        '500':
+          description: Unknown error when deleting an admin
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                unknown_error:
+                  summary: Unknown Error
+                  value:
+                    timestamp: '26-03-2022 14:00:10'
+                    status:
+                      code: UNKNOWN_ERROR
+                      message: Happened unknown error!
+                    data: null
+    get:
+      parameters:
+        - in: path
+          name: adminId
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the admin to get
+      security:
+        - bearerAuth: []
+      summary: Get Admin Info
+      tags:
+        - Admin
+      responses:
+        '200':
+          description: Find an admin
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                success:
+                  summary: Success
+                  value:
+                    timestamp: '26-03-2022 14:00:10'
+                    status:
+                      code: SUCCESS
+                      message: Success!
+                    data:
+                      id: 1
+                      username: admin1
+                      is_super_admin: false
+        '500':
+          description: Unknown error when login
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                unknown_error:
+                  summary: Unknown Error
+                  value:
+                    timestamp: '26-03-2022 14:00:10'
+                    status:
+                      code: UNKNOWN_ERROR
+                      message: Happened unknown error!
+                    data: null
+  /v1/health-facilities:
+    post:
+      security:
+        - bearerAuth: []
+      summary: Create a new health facility
+      tags:
+        - Health Facilities
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HealthFacility'
+            examples:
+              success:
+                summary: Success
+                value:
+                  name: Puskesmas 1
+                  admin:
+                    id: 1
+                  city:
+                    id: 1
+      responses:
+        '200':
+          description: Success Create a new Health Facility
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                success:
+                  summary: Success
+                  value:
+                    timestamp: '26-03-2022 14:00:10'
+                    status:
+                      code: SUCCESS
+                      message: Success!
+                    data:
+                      id: 1
+                      name: Puskesmas 1
+                      admin:
+                        id: 1
+                        name: Admin 1
+                      city:
+                        id: 1
+                        name: Jakarta
+        '500':
+          description: Unknown error when creating a new health facility
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                unknown_error:
+                  summary: Unknown Error
+                  value:
+                    timestamp: '26-03-2022 14:00:10'
+                    status:
+                      code: UNKNOWN_ERROR
+                      message: Happened unknown error!
+                    data: null
+    get:
+      security:
+        - bearerAuth: []
+      summary: Get Health Facilities Info
+      tags:
+        - Health Facilities
+      responses:
+        '200':
+          description: Find all health facilities
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                success:
+                  summary: Success
+                  value:
+                    timestamp: '26-03-2022 14:00:10'
+                    status:
+                      code: SUCCESS
+                      message: Success!
+                    data: [
+                      {
+                        id: 1,
+                        name: Puskesmas 1,
+                        admin: {
+                          id: 1,
+                          name: Admin 1
+                        },
+                        city: {
+                          id: 1,
+                          name: Jakarta
+                        }
+                      }
+                    ]
+        '500':
+          description: Unknown error when login
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                unknown_error:
+                  summary: Unknown Error
+                  value:
+                    timestamp: '26-03-2022 14:00:10'
+                    status:
+                      code: UNKNOWN_ERROR
+                      message: Happened unknown error!
+                    data: null
+  /v1/health-facilities/{healthFacilityId}:
+    get:
+      parameters:
+        - in: path
+          name: healthFacilityId
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the health facility to get
+      security:
+        - bearerAuth: []
+      summary: Get Health Facility Info
+      tags:
+        - Health Facilities
+      responses:
+        '200':
+          description: Find one health facility
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                success:
+                  summary: Success
+                  value:
+                    timestamp: '26-03-2022 14:00:10'
+                    status:
+                      code: SUCCESS
+                      message: Success!
+                    data: {
+                      id: 1,
+                      name: Puskesmas 1,
+                      admin: {
+                        id: 1,
+                        name: Admin 1
+                      },
+                      city: {
+                        id: 1,
+                        name: Jakarta
+                      }
+                    }
+        '500':
+          description: Unknown error when login
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                unknown_error:
+                  summary: Unknown Error
+                  value:
+                    timestamp: '26-03-2022 14:00:10'
+                    status:
+                      code: UNKNOWN_ERROR
+                      message: Happened unknown error!
+                    data: null
+components:
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          pattern: dd-MM-yyyy HH:mm:ss
+        status:
+          $ref: '#/components/schemas/ApiResponseStatus'
+        data:
+          type: object
+          description: Generic type can be object or list
+    ApiResponseStatus:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+    Admin:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        username:
+          type: string
+        password:
+          type: string
+        is_super_admin:
+          type: boolean
+    Users:
+      type: object
+      properties:
+        id:
+          type: integer
+        nik:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        name:
+          type: string
+        date_of_birth:
+          type: string
+        phone_number:
+          type: string
+        gender:
+          type: string
+        address:
+          type: string
+        city:
+          $ref: '#/components/schemas/City'
+    HealthFacility:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        managed_by:
+          $ref: '#/components/schemas/Admin'
+        city:
+          $ref: '#/components/schemas/City'
+    City:
+      type: object
+      properties:
+        id:
+          type: number
+        city_name:
+          type: string
