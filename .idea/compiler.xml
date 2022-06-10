@@ -11,7 +11,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="vaccine-core" target="17" />
+      <module name="vaccine-core" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
