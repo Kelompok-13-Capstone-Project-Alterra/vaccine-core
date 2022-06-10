@@ -28,10 +28,10 @@ public class UsersController {
             UsersRequest user = usersService.find(id);
             return Response.build(ResponseMessage.SUCCESS, HttpStatus.OK, user);
         } catch (BusinessFlowException e) {
-            log.error(e.getMessage());
             return Response.build(e.getCode(), e.getHttpStatus(), null);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Failed to find user by id: {}", e.getMessage());
+            log.trace(e);
             return Response.build(ResponseMessage.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR, null);
         }
     }
@@ -42,10 +42,10 @@ public class UsersController {
             List<UsersRequest> users = usersService.find();
             return Response.build(ResponseMessage.SUCCESS, HttpStatus.OK, users);
         } catch (BusinessFlowException e) {
-            log.error(e.getMessage());
             return Response.build(e.getCode(), e.getHttpStatus(), null);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Failed to get all user: {}", e.getMessage());
+            log.trace(e);
             return Response.build(ResponseMessage.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR, null);
         }
     }

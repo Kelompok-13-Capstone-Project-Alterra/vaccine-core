@@ -27,10 +27,10 @@ public class AuthController {
             Users registeredUser = authService.register(request);
             return authService.authenticatedAndGenerateToken(request);
         } catch (BusinessFlowException e) {
-            log.info(e.getMessage());
             return Response.build(e.getCode(), e.getHttpStatus(), null);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Failed to register user: {}", e.getMessage());
+            log.trace(e);
             return Response.build(ResponseMessage.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR, null);
         }
     }
@@ -42,7 +42,8 @@ public class AuthController {
         } catch (BadCredentialsException e) {
             return Response.build(ResponseMessage.INVALID_CREDENTIALS, HttpStatus.BAD_REQUEST, null);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("User failed to login: {}", e.getMessage());
+            log.trace(e);
             return Response.build(ResponseMessage.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR, null);
         }
     }
