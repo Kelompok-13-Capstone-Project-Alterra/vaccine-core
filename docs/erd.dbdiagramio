@@ -45,6 +45,7 @@ Table M_NEWS {
 
 Table M_HEALTH_FACILITIES {
   id int [pk, increment]
+  name varchar(100)
   managed_by int [ref: > M_ADMINS.id]
   city_id int [ref: > M_CITIES.id]
   created_at timestamp
@@ -97,7 +98,7 @@ Table M_FAMILY_MEMBERS {
   name varchar(50)
   date_of_birth date
   gender char(1)
-  relationship string
+  relationship varchar(50)
   created_at timestamp
   updated_at timestamp
 }
