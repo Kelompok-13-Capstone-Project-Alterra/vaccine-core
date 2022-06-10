@@ -1,5 +1,8 @@
 .DS_Store
 
+target
+
+.mvn
 
 # Compiled class file
 *.class
