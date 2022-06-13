@@ -1,7 +1,9 @@
 package com.evizy.evizy.service;
 
+import com.evizy.evizy.constant.Endpoints;
 import com.evizy.evizy.constant.ResponseMessage;
 import com.evizy.evizy.domain.dao.Users;
+import com.evizy.evizy.domain.dto.CitizenResponse;
 import com.evizy.evizy.domain.dto.UsersRequest;
 import com.evizy.evizy.errors.BusinessFlowException;
 import com.evizy.evizy.repository.UsersRepository;
@@ -13,8 +15,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,5 +66,14 @@ public class UsersService implements UserDetailsService {
         if (optionalUsers.isEmpty())
             throw new BusinessFlowException(HttpStatus.BAD_REQUEST, ResponseMessage.BAD_REQUEST, "User not found!");
         usersRepository.delete(optionalUsers.get());
+    }
+
+    public List<CitizenResponse> getAllCitizen() {
+        String url = Endpoints.API_CITIZEN_BASE_URL + "/api/v1/citizen";
+        RestTemplate restTemplate = new RestTemplate();
+
+        CitizenResponse[] lists = restTemplate.getForObject(url, CitizenResponse[].class);
+
+        return Arrays.asList(lists);
     }
 }
