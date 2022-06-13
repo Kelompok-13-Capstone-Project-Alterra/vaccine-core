@@ -119,6 +119,7 @@
 					<excludes>
 						<exclude>**/EvizyApplication.class</exclude>
 						<exclude>**/util/*.class</exclude>
+						<exclude>**/errors/*.class</exclude>
 						<exclude>**/config/*.class</exclude>
 						<exclude>**/constant/*.class</exclude>
 						<exclude>**/controller/*.class</exclude>
