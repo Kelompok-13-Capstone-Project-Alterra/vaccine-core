@@ -1,10 +1,13 @@
 package com.evizy.evizy.service;
 
 import com.evizy.evizy.config.JwtTokenProvider;
+import com.evizy.evizy.constant.ResponseMessage;
 import com.evizy.evizy.domain.common.ApiResponse;
 import com.evizy.evizy.domain.dao.Users;
+import com.evizy.evizy.domain.dto.CitizenResponse;
 import com.evizy.evizy.domain.dto.TokenResponse;
 import com.evizy.evizy.domain.dto.UsersRequest;
+import com.evizy.evizy.errors.BusinessFlowException;
 import com.evizy.evizy.repository.UsersRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,6 +20,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -38,11 +42,22 @@ class AuthServiceTest {
     @MockBean
     private JwtTokenProvider jwtTokenProvider;
 
+    @MockBean
+    private UsersService usersService;
+
     @Autowired
     private AuthService authService;
 
     @Test
     void registerUsersSuccess_Test() {
+        when(usersService.getAllCitizen()).thenReturn(List.of(
+                CitizenResponse.builder()
+                        .id(1L)
+                        .nik("1234567890123456")
+                        .name("Nathan Ramli")
+                        .build()
+        ));
+
         when(usersRepository.getDistinctTopByNik("1234567890123456")).thenReturn(null);
         when(usersRepository.save(any())).thenReturn(Users
                 .builder()
@@ -67,7 +82,7 @@ class AuthServiceTest {
     }
 
     @Test
-    void registerUsersError_Test() {
+    void registerUsersErrorExist_Test() {
         when(usersRepository.getDistinctTopByNik("1234567890123456")).thenReturn(Users
                 .builder()
                 .id(1L)
@@ -86,7 +101,29 @@ class AuthServiceTest {
                             .build()
             );
             fail();
-        } catch (Exception e) {
+        } catch (BusinessFlowException e) {
+            assertEquals(ResponseMessage.ALREADY_EXIST, e.getCode());
+        }
+    }
+
+
+    @Test
+    void registerUsersErrorInvalidNik_Test() {
+        when(usersRepository.getDistinctTopByNik(any())).thenReturn(null);
+        when(usersService.getAllCitizen()).thenReturn(List.of());
+
+        try {
+            Users user = authService.register(
+                    UsersRequest
+                            .builder()
+                            .nik("1234567890123456")
+                            .password("123456")
+                            .name("Nathan Ramli")
+                            .build()
+            );
+            fail();
+        } catch (BusinessFlowException e) {
+            assertEquals(ResponseMessage.INVALID_NIK, e.getCode());
         }
     }
 
