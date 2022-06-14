@@ -62,7 +62,8 @@ public class AuthService {
 
         Users users = Users.builder()
                 .nik(usersRequest.getNik())
-                .name(citizen.getName())
+                .name(usersRequest.getName())
+                .phoneNumber(usersRequest.getPhoneNumber())
                 .active(true)
                 .password(passwordEncoder.encode(usersRequest.getPassword())).build();
         return usersRepository.save(users);

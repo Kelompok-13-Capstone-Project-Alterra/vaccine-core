@@ -25,4 +25,5 @@ public class UsersRequest implements Serializable {
     private String nik;
     private String password;
     private String name;
+    private String phoneNumber;
 }
