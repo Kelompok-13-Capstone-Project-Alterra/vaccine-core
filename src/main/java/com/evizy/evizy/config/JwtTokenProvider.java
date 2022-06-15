@@ -33,7 +33,8 @@ public class JwtTokenProvider {
         Date now = new Date(System.currentTimeMillis());
         Date expiredDate = new Date(now.getTime() + expiration);
 
-        claims.put("username", user.getUsername());
+        claims.put("user_nik", user.getNik());
+        claims.put("user_id", user.getId());
 
         return Jwts.builder()
                 .setId(user.getId().toString())
