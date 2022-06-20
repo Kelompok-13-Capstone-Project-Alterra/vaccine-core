@@ -27,6 +27,8 @@ paths:
                 summary: Success
                 value:
                   nik: 1234567890123456
+                  name: Nathan
+                  phoneNumber: 081234567890
                   password: mypassword
       responses:
         '200':
