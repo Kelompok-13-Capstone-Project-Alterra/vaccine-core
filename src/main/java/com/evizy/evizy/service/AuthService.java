@@ -70,19 +70,14 @@ public class AuthService {
     }
 
     public ResponseEntity<?> authenticatedAndGenerateToken(UsersRequest usersRequest) {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_ADMIN");
-        List<SimpleGrantedAuthority> newAuthorities = new ArrayList<>();
-        newAuthorities.add(authority);
-
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         usersRequest.getNik(),
-                        usersRequest.getPassword(),
-                        newAuthorities
+                        usersRequest.getPassword()
                 )
         );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtTokenProvider.generateToken(authentication);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
         return Response.build(
                 ResponseMessage.SUCCESS,
                 HttpStatus.OK,

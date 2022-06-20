@@ -38,6 +38,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UsersRequest request) {
         try {
+            request.setNik("user_" + request.getNik());
             return authService.authenticatedAndGenerateToken(request);
         } catch (BadCredentialsException e) {
             return Response.build(ResponseMessage.INVALID_CREDENTIALS, HttpStatus.BAD_REQUEST, null);

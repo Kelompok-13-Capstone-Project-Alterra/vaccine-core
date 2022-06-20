@@ -8,6 +8,8 @@ servers:
     description: Development
   - url: http://127.0.0.1/api/
     description: SIT
+  - url: http://50.19.175.143/api/
+    description: SIT
 paths:
   /v1/auth/register:
     post:
@@ -77,7 +79,7 @@ paths:
                 summary: Success
                 value:
                   nik: 1234567890123456
-                  password: mypassword
+                  password: 123456
       responses:
         '200':
           description: Success Login
@@ -181,6 +183,7 @@ paths:
                 summary: Success
                 value:
                   username: admin1
+                  name: Admin Name
                   password: mypassword
       responses:
         '200':
@@ -200,6 +203,7 @@ paths:
                     data:
                       id: 1
                       username: admin1
+                      name: Admin Name
                       is_super_admin: false
         '500':
           description: Unknown error when login
@@ -320,6 +324,54 @@ paths:
       summary: Get Admin Info
       tags:
         - Admin
+      responses:
+        '200':
+          description: Find an admin
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                success:
+                  summary: Success
+                  value:
+                    timestamp: '26-03-2022 14:00:10'
+                    status:
+                      code: SUCCESS
+                      message: Success!
+                    data:
+                      id: 1
+                      username: admin1
+                      is_super_admin: false
+        '500':
+          description: Unknown error when login
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                unknown_error:
+                  summary: Unknown Error
+                  value:
+                    timestamp: '26-03-2022 14:00:10'
+                    status:
+                      code: UNKNOWN_ERROR
+                      message: Happened unknown error!
+                    data: null
+  /v1/users/{userId}:
+    get:
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the user to get
+      security:
+        - bearerAuth: []
+      summary: Get User Info
+      tags:
+        - Users
       responses:
         '200':
           description: Find an admin
@@ -565,8 +617,6 @@ components:
         id:
           type: integer
         nik:
-          type: string
-        email:
           type: string
         password:
           type: string

@@ -1,6 +1,6 @@
 package com.evizy.evizy.domain.dao;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import com.evizy.evizy.domain.common.BaseDao;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,29 +23,26 @@ import java.util.List;
 @Data
 @SuperBuilder
 @Entity
-@Table(name = "users")
+@Table(name = "admins")
 @NoArgsConstructor
 @AllArgsConstructor
-@SQLDelete(sql = "UPDATE users SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
+@SQLDelete(sql = "UPDATE admins SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
 @Where(clause = "deleted_at IS NULL")
-public class Users extends BaseDao implements Serializable, UserDetails {
-    private static final long serialVersionUID = 3942756207265430850L;
+public class Admin extends BaseDao implements Serializable, UserDetails {
+    private static final long serialVersionUID = -1694778800222631806L;
 
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "nik", nullable = false)
-    private String nik;
+    @Column(name = "username", nullable = false)
+    private String username;
 
     @Override
     public String getUsername() {
-        return this.getNik();
+        return username;
     }
-
-    @Column(name = "email")
-    private String email;
 
     @Column(name = "password", nullable = false)
     private String password;
@@ -53,18 +50,15 @@ public class Users extends BaseDao implements Serializable, UserDetails {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "date_of_birth")
-    private LocalDate dateOfBirth;
-
-    @Column(name = "phone_number")
-    private String phoneNumber;
+    @Column(name = "is_super_admin", columnDefinition = "boolean default false")
+    private boolean isSuperAdmin = false;
 
     @Column(columnDefinition = "boolean default true")
     private boolean active = true;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"));
     }
 
     @Override
@@ -86,8 +80,4 @@ public class Users extends BaseDao implements Serializable, UserDetails {
     public boolean isEnabled() {
         return active;
     }
-
-//    @JsonIgnore
-//    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
-//    private List<UserStocks> userStocks;
 }
