@@ -6,8 +6,11 @@ import com.evizy.evizy.domain.dao.Users;
 import com.evizy.evizy.domain.dto.CitizenResponse;
 import com.evizy.evizy.domain.dto.UsersRequest;
 import com.evizy.evizy.errors.BusinessFlowException;
+import com.evizy.evizy.repository.AdminRepository;
 import com.evizy.evizy.repository.UsersRepository;
 import com.evizy.evizy.util.Response;
+import io.jsonwebtoken.lang.Strings;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,15 +26,26 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class UsersService implements UserDetailsService {
     @Autowired
     private UsersRepository usersRepository;
 
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Users user = usersRepository.getDistinctTopByNik(username);
-        if (user == null)
-            throw new UsernameNotFoundException("Username not found");
-        return user;
+    @Autowired
+    private AdminRepository adminRepository;
+
+    public UserDetails loadUserByUsername(String str) throws UsernameNotFoundException {
+        UserDetails ret;
+        if (str.startsWith("admin_")) {
+            String username = str.split("admin_", 2)[1];
+            ret = adminRepository.getDistinctTopByUsername(username);
+        } else {
+            String username = str.split("user_", 2)[1];
+            ret = usersRepository.getDistinctTopByNik(username);
+        }
+        if (ret == null)
+            throw new UsernameNotFoundException("Credentials not found");
+        return ret;
     }
 
     public UsersRequest find(Long id) {
