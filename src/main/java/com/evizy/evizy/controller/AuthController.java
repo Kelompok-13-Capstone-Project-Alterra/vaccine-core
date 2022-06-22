@@ -29,8 +29,9 @@ public class AuthController {
         try {
             Validation.validate(request);
 
-            request.setNik("user_" + request.getNik());
             Users registeredUser = authService.register(request);
+
+            request.setNik("user_" + request.getNik());
             return authService.authenticatedAndGenerateToken(request);
         } catch (ConstraintViolationException e) {
             return Response.build(ResponseMessage.INVALID_INPUT, HttpStatus.BAD_REQUEST, null);
