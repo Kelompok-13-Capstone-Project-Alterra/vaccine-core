@@ -29,6 +29,7 @@ public class AuthController {
         try {
             Validation.validate(request);
 
+            request.setNik("user_" + request.getNik());
             Users registeredUser = authService.register(request);
             return authService.authenticatedAndGenerateToken(request);
         } catch (ConstraintViolationException e) {
