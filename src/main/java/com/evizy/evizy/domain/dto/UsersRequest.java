@@ -9,7 +9,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.*;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
+import java.util.Set;
 
 @Data
 @Builder
@@ -22,8 +25,12 @@ public class UsersRequest implements Serializable {
     private static final long serialVersionUID = -5852095789648986257L;
 
     private Long id;
+
+    @Pattern(regexp = "^[0-9]{16}$")
     private String nik;
+
     private String password;
+
     private String name;
     private String phoneNumber;
 }
