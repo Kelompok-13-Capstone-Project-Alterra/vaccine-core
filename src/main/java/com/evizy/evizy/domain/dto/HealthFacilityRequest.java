@@ -1,5 +1,7 @@
 package com.evizy.evizy.domain.dto;
 
+import com.evizy.evizy.domain.dao.Admin;
+import com.evizy.evizy.domain.dao.City;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -9,10 +11,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.*;
-import javax.validation.constraints.Pattern;
+import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
 
 @Data
 @Builder
@@ -21,17 +21,13 @@ import java.util.Set;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UsersRequest implements Serializable {
-    private static final long serialVersionUID = -5852095789648986257L;
+public class HealthFacilityRequest implements Serializable {
+    private static final long serialVersionUID = -8382189692562014825L;
 
     private Long id;
-
-    @Pattern(regexp = "^[0-9]{16}$")
-    private String nik;
-
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$")
-    private String password;
-
     private String name;
-    private String phoneNumber;
+
+    private AdminsRequest admin;
+    private CityRequest city;
+
 }
