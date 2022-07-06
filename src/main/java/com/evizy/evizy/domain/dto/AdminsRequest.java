@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
 @Data
@@ -22,7 +23,11 @@ public class AdminsRequest implements Serializable {
     private static final long serialVersionUID = 1771519630948195721L;
 
     private Long id;
+
+    @Pattern(regexp = "^([a-z]|[A-Z]|[0-9]).{8,}$")
     private String username;
+
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$")
     private String password;
     private String name;
     private boolean isSuperAdmin;
