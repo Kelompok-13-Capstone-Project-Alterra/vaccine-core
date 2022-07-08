@@ -61,11 +61,11 @@ Table M_HEALTH_FACILITIES_VACCINES {
 }
 
 Table T_VACCINE_DISTRIBUTION {
+  id int pk
   health_facility_id int [ref: > M_HEALTH_FACILITIES.id]
   vaccine_id int [ref: > M_VACCINE.id]
   vaccination_session_id int [ref: > M_VACCINATION_SESSIONS.id]
-  in int
-  out int
+  quantity int
   created_at timestamp
   updated_at timestamp
 }
