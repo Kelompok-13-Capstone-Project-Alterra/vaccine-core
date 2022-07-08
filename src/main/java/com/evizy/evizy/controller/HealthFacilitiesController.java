@@ -2,10 +2,11 @@ package com.evizy.evizy.controller;
 
 
 import com.evizy.evizy.constant.ResponseMessage;
-import com.evizy.evizy.domain.dto.AdminsRequest;
-import com.evizy.evizy.domain.dto.HealthFacilityRequest;
+import com.evizy.evizy.domain.dto.*;
 import com.evizy.evizy.errors.BusinessFlowException;
 import com.evizy.evizy.service.AdminService;
+import com.evizy.evizy.service.FamilyMembersService;
+import com.evizy.evizy.service.HealthFacilitiesVaccinesService;
 import com.evizy.evizy.service.HealthFacilityService;
 import com.evizy.evizy.util.Response;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,9 @@ import java.util.List;
 @RequestMapping("/api/v1/health-facilities")
 public class HealthFacilitiesController {
     private final HealthFacilityService healthFacilityService;
+    private final HealthFacilitiesVaccinesService healthFacilitiesVaccinesService;
     private final AdminService adminService;
+    private final FamilyMembersService familyMembersService;
 
     @PostMapping("")
     public ResponseEntity<?> create(Principal principal, @RequestBody HealthFacilityRequest request) {
@@ -102,6 +105,44 @@ public class HealthFacilitiesController {
             return Response.build(e.getCode(), e.getHttpStatus(), null);
         } catch (Exception e) {
             log.error("Failed to get all health facilities: {}", e.getMessage());
+            log.trace(e);
+            return Response.build(ResponseMessage.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR, null);
+        }
+    }
+
+    @GetMapping("/{id}/vaccines")
+    public ResponseEntity<?> getAllVaccines(@PathVariable Long id) {
+        try {
+            List<HealthFacilityVaccinesRequest> healthFacilityVaccines = healthFacilitiesVaccinesService.find(id);
+            return Response.build(ResponseMessage.SUCCESS, HttpStatus.OK, healthFacilityVaccines);
+        } catch (BusinessFlowException e) {
+            return Response.build(e.getCode(), e.getHttpStatus(), null);
+        } catch (Exception e) {
+            log.error("Failed to get all health facilities vaccines: {}", e.getMessage());
+            log.trace(e);
+            return Response.build(ResponseMessage.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR, null);
+        }
+    }
+
+    @PostMapping("/{id}/vaccines")
+    public ResponseEntity<?> createVaccineDistribution(Principal principal, @PathVariable Long id, @RequestBody VaccineDistributionRequest request) {
+        try {
+            AdminsRequest admin = adminService.find(principal.getName());
+
+            HealthFacilityRequest healthFacility = healthFacilityService.find(id);
+            if (!healthFacility.getAdmin().getId().equals(admin.getId()) && !admin.isSuperAdmin()) {
+                throw new BusinessFlowException(HttpStatus.UNAUTHORIZED, ResponseMessage.UNAUTHORIZED, "Unauthorized to create vaccine distribution.");
+            }
+
+            request.setHealthFacility(HealthFacilityRequest.builder()
+                    .id(id)
+                    .build());
+            HealthFacilityVaccinesRequest healthFacilityVaccines = healthFacilitiesVaccinesService.distribute(request);
+            return Response.build(ResponseMessage.SUCCESS, HttpStatus.OK, healthFacilityVaccines);
+        } catch (BusinessFlowException e) {
+            return Response.build(e.getCode(), e.getHttpStatus(), null);
+        } catch (Exception e) {
+            log.error("Failed to create vaccine distribution: {}", e.getMessage());
             log.trace(e);
             return Response.build(ResponseMessage.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR, null);
         }

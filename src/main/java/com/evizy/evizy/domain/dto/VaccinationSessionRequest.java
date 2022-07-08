@@ -4,14 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import javax.persistence.Column;
 import java.io.Serializable;
-import java.time.LocalDate;
 
 @Data
 @Builder
@@ -20,15 +15,15 @@ import java.time.LocalDate;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class FamilyMembersRequest implements Serializable {
-    private static final long serialVersionUID = -910933681134427230L;
+public class VaccinationSessionRequest implements Serializable {
+    private static final long serialVersionUID = 896144549202810066L;
 
     private Long id;
-    private UsersRequest user;
-    private String nik;
-    private String name;
-    private String phoneNumber;
-    private LocalDate dateOfBirth;
-    private char gender;
-    private String relationship;
+    private HealthFacilityRequest healthFacility;
+    private VaccineRequest vaccine;
+
+    private Long scheduleStart;
+    private Long scheduleEnd;
+    private Long quantity;
+    private Long booked;
 }

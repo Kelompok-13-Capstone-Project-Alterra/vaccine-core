@@ -44,6 +44,7 @@ public class FamilyMembersService {
                         .id(request.getUser().getId())
                         .build())
                 .nik(request.getNik())
+                .phoneNumber(request.getPhoneNumber())
                 .dateOfBirth(request.getDateOfBirth())
                 .gender(request.getGender())
                 .relationship(request.getRelationship())
@@ -55,6 +56,7 @@ public class FamilyMembersService {
                         .id(request.getUser().getId())
                         .build())
                 .nik(familyMembers.getNik())
+                .phoneNumber(familyMembers.getPhoneNumber())
                 .dateOfBirth(familyMembers.getDateOfBirth())
                 .gender(familyMembers.getGender())
                 .relationship(familyMembers.getRelationship())
@@ -93,6 +95,7 @@ public class FamilyMembersService {
         FamilyMembers familyMembers = optionalFamilyMembers.get();
         familyMembers.setNik(request.getNik());
         familyMembers.setName(request.getName());
+        familyMembers.setPhoneNumber(request.getPhoneNumber());
         familyMembers.setDateOfBirth(request.getDateOfBirth());
         familyMembers.setGender(request.getGender());
         familyMembers.setRelationship(request.getRelationship());
@@ -107,6 +110,7 @@ public class FamilyMembersService {
                         .name(user.getName())
                         .build())
                 .nik(familyMembers.getNik())
+                .phoneNumber(familyMembers.getPhoneNumber())
                 .dateOfBirth(familyMembers.getDateOfBirth())
                 .gender(familyMembers.getGender())
                 .relationship(familyMembers.getRelationship())
@@ -128,6 +132,7 @@ public class FamilyMembersService {
                         .name(user.getName())
                         .build())
                 .nik(familyMembers.getNik())
+                .phoneNumber(familyMembers.getPhoneNumber())
                 .dateOfBirth(familyMembers.getDateOfBirth())
                 .gender(familyMembers.getGender())
                 .relationship(familyMembers.getRelationship())
@@ -153,6 +158,7 @@ public class FamilyMembersService {
                             .name(user.getName())
                             .build())
                     .nik(familyMembers.getNik())
+                    .phoneNumber(familyMembers.getPhoneNumber())
                     .dateOfBirth(familyMembers.getDateOfBirth())
                     .gender(familyMembers.getGender())
                     .relationship(familyMembers.getRelationship())

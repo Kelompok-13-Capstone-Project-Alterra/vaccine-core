@@ -9,9 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
 import java.io.Serializable;
-import java.time.LocalDate;
 
 @Data
 @Builder
@@ -20,15 +18,12 @@ import java.time.LocalDate;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class FamilyMembersRequest implements Serializable {
-    private static final long serialVersionUID = -910933681134427230L;
+public class VaccineDistributionRequest implements Serializable {
+    private static final long serialVersionUID = 1014330226420534870L;
 
     private Long id;
-    private UsersRequest user;
-    private String nik;
-    private String name;
-    private String phoneNumber;
-    private LocalDate dateOfBirth;
-    private char gender;
-    private String relationship;
+    private HealthFacilityRequest healthFacility;
+    private VaccineRequest vaccine;
+    private VaccinationSessionRequest vaccinationSession;
+    private Long quantity;
 }
