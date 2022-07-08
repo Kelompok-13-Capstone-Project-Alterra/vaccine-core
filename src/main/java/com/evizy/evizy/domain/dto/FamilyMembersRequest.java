@@ -27,6 +27,7 @@ public class FamilyMembersRequest implements Serializable {
     private UsersRequest user;
     private String nik;
     private String name;
+    private String phoneNumber;
     private LocalDate dateOfBirth;
     private char gender;
     private String relationship;
