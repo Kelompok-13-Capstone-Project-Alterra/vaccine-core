@@ -10,4 +10,5 @@ public class ResponseMessage {
     public static String INVALID_INPUT = "INVALID_INPUT";
     public static String INTERNAL_SERVER_ERROR = "INTERNAL_SERVER_ERROR";
     public static String UNAUTHORIZED = "UNAUTHORIZED";
+    public static String STOCK_NOT_VALID = "STOCK_NOT_VALID";
 }
