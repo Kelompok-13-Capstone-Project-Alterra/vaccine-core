@@ -1,10 +1,10 @@
 package com.evizy.evizy.controller;
 
 import com.evizy.evizy.constant.ResponseMessage;
-import com.evizy.evizy.domain.dto.AdminsRequest;
+import com.evizy.evizy.domain.dao.Admin;
 import com.evizy.evizy.domain.dto.VaccineRequest;
 import com.evizy.evizy.errors.BusinessFlowException;
-import com.evizy.evizy.service.AdminService;
+import com.evizy.evizy.service.AuthService;
 import com.evizy.evizy.service.VaccineService;
 import com.evizy.evizy.util.Response;
 import lombok.RequiredArgsConstructor;
@@ -22,12 +22,12 @@ import java.util.List;
 @RequestMapping("/api/v1/vaccines")
 public class VaccineController {
     private final VaccineService vaccineService;
-    private final AdminService adminService;
+    private final AuthService authService;
 
     @PostMapping("")
     public ResponseEntity<?> create(Principal principal, @RequestBody VaccineRequest request) {
         try {
-            AdminsRequest admin = adminService.find(principal.getName());
+            Admin admin = (Admin) authService.getInfoByPrincipal("admin_" + principal.getName());
             if (!admin.isSuperAdmin())
                 throw new BusinessFlowException(HttpStatus.UNAUTHORIZED, ResponseMessage.UNAUTHORIZED, "Unauthorized to create new vaccine.");
 
@@ -45,7 +45,7 @@ public class VaccineController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(Principal principal, @PathVariable Long id) {
         try {
-            AdminsRequest admin = adminService.find(principal.getName());
+            Admin admin = (Admin) authService.getInfoByPrincipal("admin_" + principal.getName());
             if (!admin.isSuperAdmin())
                 throw new BusinessFlowException(HttpStatus.UNAUTHORIZED, ResponseMessage.UNAUTHORIZED, "Unauthorized to delete vaccine.");
 
@@ -63,7 +63,7 @@ public class VaccineController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(Principal principal, @PathVariable Long id, @RequestBody VaccineRequest request) {
         try {
-            AdminsRequest admin = adminService.find(principal.getName());
+            Admin admin = (Admin) authService.getInfoByPrincipal("admin_" + principal.getName());
             if (!admin.isSuperAdmin())
                 throw new BusinessFlowException(HttpStatus.UNAUTHORIZED, ResponseMessage.UNAUTHORIZED, "Unauthorized to update vaccine.");
 

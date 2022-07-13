@@ -6,6 +6,7 @@ import com.evizy.evizy.domain.dto.CitizenResponse;
 import com.evizy.evizy.domain.dto.TokenResponse;
 import com.evizy.evizy.domain.dto.UsersRequest;
 import com.evizy.evizy.errors.BusinessFlowException;
+import com.evizy.evizy.repository.AdminRepository;
 import com.evizy.evizy.repository.UsersRepository;
 import com.evizy.evizy.config.JwtTokenProvider;
 import com.evizy.evizy.util.Response;
@@ -17,6 +18,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +37,22 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
 
     private final UsersService usersService;
+
+    private final AdminRepository adminRepository;
+
+    public UserDetails getInfoByPrincipal(String str) throws BusinessFlowException {
+        UserDetails ret;
+        if (str.startsWith("admin_")) {
+            String username = str.split("admin_", 2)[1];
+            ret = adminRepository.getDistinctTopByUsername(username);
+        } else {
+            String username = str.split("user_", 2)[1];
+            ret = usersRepository.getDistinctTopByNik(username);
+        }
+        if (ret == null)
+            throw new BusinessFlowException(HttpStatus.UNAUTHORIZED, ResponseMessage.UNAUTHORIZED, "Info not found!");
+        return ret;
+    }
 
     public Users register(UsersRequest usersRequest) throws BusinessFlowException {
         Users exists = usersRepository.getDistinctTopByNik(usersRequest.getNik());
@@ -59,6 +77,7 @@ public class AuthService {
                 .nik(usersRequest.getNik())
                 .name(usersRequest.getName())
                 .phoneNumber(usersRequest.getPhoneNumber())
+                .gender(usersRequest.getGender())
                 .active(true)
                 .password(passwordEncoder.encode(usersRequest.getPassword())).build();
         return usersRepository.save(users);

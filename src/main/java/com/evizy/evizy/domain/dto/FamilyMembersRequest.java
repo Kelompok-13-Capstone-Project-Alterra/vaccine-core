@@ -9,7 +9,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -29,6 +28,6 @@ public class FamilyMembersRequest implements Serializable {
     private String name;
     private String phoneNumber;
     private LocalDate dateOfBirth;
-    private char gender;
+    private Character gender;
     private String relationship;
 }

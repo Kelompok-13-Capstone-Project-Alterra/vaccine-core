@@ -39,14 +39,14 @@ public class FamilyMembers extends BaseDao implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "phone_number")
+    @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
     @Column(name = "gender")
-    private char gender;
+    private Character gender;
 
     @Column(name = "relationship")
     private String relationship;

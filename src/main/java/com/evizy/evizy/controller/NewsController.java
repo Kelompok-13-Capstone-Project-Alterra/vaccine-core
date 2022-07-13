@@ -1,10 +1,11 @@
 package com.evizy.evizy.controller;
 
 import com.evizy.evizy.constant.ResponseMessage;
+import com.evizy.evizy.domain.dao.Admin;
 import com.evizy.evizy.domain.dto.AdminsRequest;
 import com.evizy.evizy.domain.dto.NewsRequest;
 import com.evizy.evizy.errors.BusinessFlowException;
-import com.evizy.evizy.service.AdminService;
+import com.evizy.evizy.service.AuthService;
 import com.evizy.evizy.service.NewsService;
 import com.evizy.evizy.util.Response;
 import lombok.RequiredArgsConstructor;
@@ -22,12 +23,12 @@ import java.util.List;
 @RequestMapping("/api/v1/news")
 public class NewsController {
     private final NewsService newsService;
-    private final AdminService adminService;
+    private final AuthService authService;
 
     @PostMapping("")
     public ResponseEntity<?> create(Principal principal, @RequestBody NewsRequest request) {
         try {
-            AdminsRequest admin = adminService.find(principal.getName());
+            Admin admin = (Admin) authService.getInfoByPrincipal("admin_" + principal.getName());
             if (!admin.isSuperAdmin())
                 throw new BusinessFlowException(HttpStatus.UNAUTHORIZED, ResponseMessage.UNAUTHORIZED, "Unauthorized to create new news.");
             request.setAdmin(AdminsRequest.builder()
@@ -47,7 +48,7 @@ public class NewsController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(Principal principal, @PathVariable Long id) {
         try {
-            AdminsRequest admin = adminService.find(principal.getName());
+            Admin admin = (Admin) authService.getInfoByPrincipal("admin_" + principal.getName());
             if (!admin.isSuperAdmin())
                 throw new BusinessFlowException(HttpStatus.UNAUTHORIZED, ResponseMessage.UNAUTHORIZED, "Unauthorized to delete news.");
 
@@ -65,7 +66,7 @@ public class NewsController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(Principal principal, @PathVariable Long id, @RequestBody NewsRequest request) {
         try {
-            AdminsRequest admin = adminService.find(principal.getName());
+            Admin admin = (Admin) authService.getInfoByPrincipal("admin_" + principal.getName());
             if (!admin.isSuperAdmin())
                 throw new BusinessFlowException(HttpStatus.UNAUTHORIZED, ResponseMessage.UNAUTHORIZED, "Unauthorized to update news.");
 
