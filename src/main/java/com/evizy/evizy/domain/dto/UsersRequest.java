@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @Data
 @Builder
@@ -30,7 +31,10 @@ public class UsersRequest implements Serializable {
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$")
     private String password;
 
+    @Pattern(regexp = "^08[0-9]{9,11}$")
+    private String phoneNumber;
+
     private String name;
     private Character gender;
-    private String phoneNumber;
+    private LocalDate dateOfBirth;
 }
