@@ -34,6 +34,9 @@ public class UsersService implements UserDetailsService {
     @Autowired
     private AdminRepository adminRepository;
 
+    @Autowired
+    private RestTemplate restTemplate;
+
     public UserDetails loadUserByUsername(String str) throws UsernameNotFoundException {
         UserDetails ret;
         if (str.startsWith("admin_")) {
@@ -84,8 +87,6 @@ public class UsersService implements UserDetailsService {
 
     public List<CitizenResponse> getAllCitizen() {
         String url = Endpoints.API_CITIZEN_BASE_URL + "/api/v1/citizen";
-        RestTemplate restTemplate = new RestTemplate();
-
         CitizenResponse[] lists = restTemplate.getForObject(url, CitizenResponse[].class);
 
         return Arrays.asList(lists);

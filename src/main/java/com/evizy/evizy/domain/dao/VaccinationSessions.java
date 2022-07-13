@@ -13,6 +13,7 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -38,11 +39,14 @@ public class VaccinationSessions extends BaseDao implements Serializable {
     @ManyToOne
     private Vaccine vaccine;
 
-    @Column(name = "schedule_start", nullable = false)
-    private Long scheduleStart;
+    @Column(name = "schedule_date", nullable = false)
+    private LocalDate scheduleDate;
 
-    @Column(name = "schedule_end", nullable = false)
-    private Long scheduleEnd;
+    @Column(name = "schedule_time_start", nullable = false)
+    private String scheduleTimeStart;
+
+    @Column(name = "schedule_time_end", nullable = false)
+    private String scheduleTimeEnd;
 
     @Column(name = "quantity", nullable = false)
     private Long quantity;

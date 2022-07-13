@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface VaccinationSessionsRepository extends JpaRepository<VaccinationSessions, Long> {
-    List<VaccinationSessions> findAllByHealthFacilityCityId(Long cityId);
+    List<VaccinationSessions> findAllByHealthFacilityId(Long healthFacilityId);
 }

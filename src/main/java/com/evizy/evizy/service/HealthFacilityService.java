@@ -4,6 +4,7 @@ import com.evizy.evizy.constant.ResponseMessage;
 import com.evizy.evizy.domain.dao.Admin;
 import com.evizy.evizy.domain.dao.City;
 import com.evizy.evizy.domain.dao.HealthFacility;
+import com.evizy.evizy.domain.dao.VaccinationSessions;
 import com.evizy.evizy.domain.dto.AdminsRequest;
 import com.evizy.evizy.domain.dto.CityRequest;
 import com.evizy.evizy.domain.dto.HealthFacilityRequest;
@@ -136,8 +137,13 @@ public class HealthFacilityService {
                 .build();
     }
 
-    public List<HealthFacilityRequest> find() {
-        List<HealthFacility> healthFacilityList = healthFacilityRepository.findAll();
+    public List<HealthFacilityRequest> findAll(Long cityId) {
+        List<HealthFacility> healthFacilityList;
+        if (cityId == null) {
+            healthFacilityList = healthFacilityRepository.findAll();
+        } else {
+            healthFacilityList = healthFacilityRepository.findAllByCityId(cityId);
+        }
         List<HealthFacilityRequest> healthFacilityRequests = new ArrayList<>();
         for(HealthFacility healthFacility : healthFacilityList) {
             City city = healthFacility.getCity();
