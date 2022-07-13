@@ -69,8 +69,9 @@ public class VaccinationSessionService {
         VaccinationSessions vaccinationSessions = VaccinationSessions.builder()
                 .healthFacility(optionalHealthFacility.get())
                 .vaccine(optionalVaccine.get())
-                .scheduleStart(request.getScheduleStart())
-                .scheduleEnd(request.getScheduleEnd())
+                .scheduleDate(request.getScheduleDate())
+                .scheduleTimeStart(request.getScheduleTimeStart())
+                .scheduleTimeEnd(request.getScheduleTimeEnd())
                 .quantity(request.getQuantity())
                 .booked(0L)
                 .build();
@@ -86,8 +87,9 @@ public class VaccinationSessionService {
                         .id(optionalVaccine.get().getId())
                         .name(optionalVaccine.get().getName())
                         .build())
-                .scheduleStart(vaccinationSessions.getScheduleStart())
-                .scheduleEnd(vaccinationSessions.getScheduleEnd())
+                .scheduleDate(vaccinationSessions.getScheduleDate())
+                .scheduleTimeStart(vaccinationSessions.getScheduleTimeStart())
+                .scheduleTimeEnd(vaccinationSessions.getScheduleTimeEnd())
                 .quantity(vaccinationSessions.getQuantity())
                 .booked(vaccinationSessions.getBooked())
                 .build();
@@ -177,8 +179,9 @@ public class VaccinationSessionService {
         healthFacilitiesVaccinesRepository.save(requestedHealthFacilitiesVaccines);
 
         vaccinationSessions.setVaccine(optionalVaccine.get());
-        vaccinationSessions.setScheduleStart(request.getScheduleStart());
-        vaccinationSessions.setScheduleEnd(request.getScheduleEnd());
+        vaccinationSessions.setScheduleDate(request.getScheduleDate());
+        vaccinationSessions.setScheduleTimeStart(request.getScheduleTimeStart());
+        vaccinationSessions.setScheduleTimeEnd(request.getScheduleTimeEnd());
         vaccinationSessions.setQuantity(request.getQuantity());
         vaccinationSessionsRepository.save(vaccinationSessions);
 
@@ -192,8 +195,9 @@ public class VaccinationSessionService {
                         .id(vaccinationSessions.getHealthFacility().getId())
                         .name(vaccinationSessions.getHealthFacility().getName())
                         .build())
-                .scheduleStart(vaccinationSessions.getScheduleStart())
-                .scheduleEnd(vaccinationSessions.getScheduleEnd())
+                .scheduleDate(vaccinationSessions.getScheduleDate())
+                .scheduleTimeStart(vaccinationSessions.getScheduleTimeStart())
+                .scheduleTimeEnd(vaccinationSessions.getScheduleTimeEnd())
                 .quantity(vaccinationSessions.getQuantity())
                 .booked(vaccinationSessions.getBooked())
                 .build();
@@ -214,19 +218,20 @@ public class VaccinationSessionService {
                         .id(vaccinationSessions.getHealthFacility().getId())
                         .name(vaccinationSessions.getHealthFacility().getName())
                         .build())
-                .scheduleStart(vaccinationSessions.getScheduleStart())
-                .scheduleEnd(vaccinationSessions.getScheduleEnd())
+                .scheduleDate(vaccinationSessions.getScheduleDate())
+                .scheduleTimeStart(vaccinationSessions.getScheduleTimeStart())
+                .scheduleTimeEnd(vaccinationSessions.getScheduleTimeEnd())
                 .quantity(vaccinationSessions.getQuantity())
                 .booked(vaccinationSessions.getBooked())
                 .build();
     }
 
-    public List<VaccinationSessionRequest> findAll(Long cityId) {
+    public List<VaccinationSessionRequest> findAll(Long healthFacilityId) {
         List<VaccinationSessions> vaccinationSessionsList;
-        if (cityId == null) {
+        if (healthFacilityId == null) {
             vaccinationSessionsList = vaccinationSessionsRepository.findAll();
         } else {
-            vaccinationSessionsList = vaccinationSessionsRepository.findAllByHealthFacilityCityId(cityId);
+            vaccinationSessionsList = vaccinationSessionsRepository.findAllByHealthFacilityId(healthFacilityId);
         }
         List<VaccinationSessionRequest> vaccinationSessionRequests = new ArrayList<>();
         for(VaccinationSessions vaccinationSessions : vaccinationSessionsList) {
@@ -240,8 +245,9 @@ public class VaccinationSessionService {
                             .id(vaccinationSessions.getHealthFacility().getId())
                             .name(vaccinationSessions.getHealthFacility().getName())
                             .build())
-                    .scheduleStart(vaccinationSessions.getScheduleStart())
-                    .scheduleEnd(vaccinationSessions.getScheduleEnd())
+                    .scheduleDate(vaccinationSessions.getScheduleDate())
+                    .scheduleTimeStart(vaccinationSessions.getScheduleTimeStart())
+                    .scheduleTimeEnd(vaccinationSessions.getScheduleTimeEnd())
                     .quantity(vaccinationSessions.getQuantity())
                     .booked(vaccinationSessions.getBooked())
                     .build());

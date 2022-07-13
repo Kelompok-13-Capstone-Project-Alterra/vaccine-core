@@ -94,9 +94,9 @@ public class HealthFacilitiesController {
     }
 
     @GetMapping("")
-    public ResponseEntity<?> findAll() {
+    public ResponseEntity<?> findAll(@RequestParam(value = "city_id", required = false) Long cityId) {
         try {
-            List<HealthFacilityRequest> healthFacilities = healthFacilityService.find();
+            List<HealthFacilityRequest> healthFacilities = healthFacilityService.findAll(cityId);
             return Response.build(ResponseMessage.SUCCESS, HttpStatus.OK, healthFacilities);
         } catch (BusinessFlowException e) {
             return Response.build(e.getCode(), e.getHttpStatus(), null);

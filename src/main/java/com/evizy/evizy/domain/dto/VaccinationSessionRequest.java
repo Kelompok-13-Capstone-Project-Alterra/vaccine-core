@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.*;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @Data
 @Builder
@@ -22,8 +23,9 @@ public class VaccinationSessionRequest implements Serializable {
     private HealthFacilityRequest healthFacility;
     private VaccineRequest vaccine;
 
-    private Long scheduleStart;
-    private Long scheduleEnd;
+    private LocalDate scheduleDate;
+    private String scheduleTimeStart;
+    private String scheduleTimeEnd;
     private Long quantity;
     private Long booked;
 }
