@@ -8,12 +8,9 @@ import com.evizy.evizy.domain.dto.UsersRequest;
 import com.evizy.evizy.errors.BusinessFlowException;
 import com.evizy.evizy.repository.AdminRepository;
 import com.evizy.evizy.repository.UsersRepository;
-import com.evizy.evizy.util.Response;
-import io.jsonwebtoken.lang.Strings;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -61,6 +58,9 @@ public class UsersService implements UserDetailsService {
                 .id(user.getId())
                 .nik(user.getNik())
                 .name(user.getName())
+                .phoneNumber(user.getPhoneNumber())
+                .gender(user.getGender())
+                .dateOfBirth(user.getDateOfBirth())
                 .build();
     }
 
@@ -73,6 +73,9 @@ public class UsersService implements UserDetailsService {
                     .id(user.getId())
                     .nik(user.getNik())
                     .name(user.getName())
+                    .phoneNumber(user.getPhoneNumber())
+                    .gender(user.getGender())
+                    .dateOfBirth(user.getDateOfBirth())
                     .build());
         }
         return usersRequests;
