@@ -17,7 +17,6 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -58,6 +57,9 @@ public class Users extends BaseDao implements Serializable, UserDetails {
 
     @Column(name = "phone_number")
     private String phoneNumber;
+
+    @Column(name = "gender")
+    private Character gender;
 
     @Column(columnDefinition = "boolean default true")
     private boolean active = true;

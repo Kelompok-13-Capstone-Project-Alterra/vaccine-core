@@ -2,12 +2,10 @@ package com.evizy.evizy.controller;
 
 
 import com.evizy.evizy.constant.ResponseMessage;
+import com.evizy.evizy.domain.dao.Admin;
 import com.evizy.evizy.domain.dto.*;
 import com.evizy.evizy.errors.BusinessFlowException;
-import com.evizy.evizy.service.AdminService;
-import com.evizy.evizy.service.FamilyMembersService;
-import com.evizy.evizy.service.HealthFacilitiesVaccinesService;
-import com.evizy.evizy.service.HealthFacilityService;
+import com.evizy.evizy.service.*;
 import com.evizy.evizy.util.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -25,13 +23,12 @@ import java.util.List;
 public class HealthFacilitiesController {
     private final HealthFacilityService healthFacilityService;
     private final HealthFacilitiesVaccinesService healthFacilitiesVaccinesService;
-    private final AdminService adminService;
-    private final FamilyMembersService familyMembersService;
+    private final AuthService authService;
 
     @PostMapping("")
     public ResponseEntity<?> create(Principal principal, @RequestBody HealthFacilityRequest request) {
         try {
-            AdminsRequest admin = adminService.find(principal.getName());
+            Admin admin = (Admin) authService.getInfoByPrincipal("admin_" + principal.getName());
             if (!admin.isSuperAdmin())
                 throw new BusinessFlowException(HttpStatus.UNAUTHORIZED, ResponseMessage.UNAUTHORIZED, "Unauthorized to create new health facility.");
 
@@ -49,7 +46,7 @@ public class HealthFacilitiesController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(Principal principal, @PathVariable Long id) {
         try {
-            AdminsRequest admin = adminService.find(principal.getName());
+            Admin admin = (Admin) authService.getInfoByPrincipal("admin_" + principal.getName());
             if (!admin.isSuperAdmin())
                 throw new BusinessFlowException(HttpStatus.UNAUTHORIZED, ResponseMessage.UNAUTHORIZED, "Unauthorized to delete health facility.");
 
@@ -67,7 +64,7 @@ public class HealthFacilitiesController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(Principal principal, @PathVariable Long id, @RequestBody HealthFacilityRequest request) {
         try {
-            AdminsRequest admin = adminService.find(principal.getName());
+            Admin admin = (Admin) authService.getInfoByPrincipal("admin_" + principal.getName());
             if (!admin.isSuperAdmin())
                 throw new BusinessFlowException(HttpStatus.UNAUTHORIZED, ResponseMessage.UNAUTHORIZED, "Unauthorized to update health facility.");
 
@@ -127,7 +124,7 @@ public class HealthFacilitiesController {
     @PostMapping("/{id}/vaccines")
     public ResponseEntity<?> createVaccineDistribution(Principal principal, @PathVariable Long id, @RequestBody VaccineDistributionRequest request) {
         try {
-            AdminsRequest admin = adminService.find(principal.getName());
+            Admin admin = (Admin) authService.getInfoByPrincipal("admin_" + principal.getName());
 
             HealthFacilityRequest healthFacility = healthFacilityService.find(id);
             if (!healthFacility.getAdmin().getId().equals(admin.getId()) && !admin.isSuperAdmin()) {

@@ -2,13 +2,11 @@ package com.evizy.evizy.controller;
 
 
 import com.evizy.evizy.constant.ResponseMessage;
-import com.evizy.evizy.domain.dto.AdminsRequest;
+import com.evizy.evizy.domain.dao.Admin;
 import com.evizy.evizy.domain.dto.CityRequest;
-import com.evizy.evizy.domain.dto.HealthFacilityRequest;
 import com.evizy.evizy.errors.BusinessFlowException;
-import com.evizy.evizy.service.AdminService;
+import com.evizy.evizy.service.AuthService;
 import com.evizy.evizy.service.CityService;
-import com.evizy.evizy.service.HealthFacilityService;
 import com.evizy.evizy.util.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -25,12 +23,12 @@ import java.util.List;
 @RequestMapping("/api/v1/cities")
 public class CityController {
     private final CityService cityService;
-    private final AdminService adminService;
+    private final AuthService authService;
 
     @PostMapping("")
     public ResponseEntity<?> create(Principal principal, @RequestBody CityRequest request) {
         try {
-            AdminsRequest admin = adminService.find(principal.getName());
+            Admin admin = (Admin) authService.getInfoByPrincipal("admin_" + principal.getName());
             if (!admin.isSuperAdmin())
                 throw new BusinessFlowException(HttpStatus.UNAUTHORIZED, ResponseMessage.UNAUTHORIZED, "Unauthorized to create new city.");
 
@@ -48,7 +46,7 @@ public class CityController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(Principal principal, @PathVariable Long id) {
         try {
-            AdminsRequest admin = adminService.find(principal.getName());
+            Admin admin = (Admin) authService.getInfoByPrincipal("admin_" + principal.getName());
             if (!admin.isSuperAdmin())
                 throw new BusinessFlowException(HttpStatus.UNAUTHORIZED, ResponseMessage.UNAUTHORIZED, "Unauthorized to delete city.");
 
@@ -66,7 +64,7 @@ public class CityController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(Principal principal, @PathVariable Long id, @RequestBody CityRequest request) {
         try {
-            AdminsRequest admin = adminService.find(principal.getName());
+            Admin admin = (Admin) authService.getInfoByPrincipal("admin_" + principal.getName());
             if (!admin.isSuperAdmin())
                 throw new BusinessFlowException(HttpStatus.UNAUTHORIZED, ResponseMessage.UNAUTHORIZED, "Unauthorized to update city.");
 

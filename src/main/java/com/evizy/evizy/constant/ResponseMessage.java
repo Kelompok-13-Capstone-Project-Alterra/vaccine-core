@@ -11,4 +11,7 @@ public class ResponseMessage {
     public static String INTERNAL_SERVER_ERROR = "INTERNAL_SERVER_ERROR";
     public static String UNAUTHORIZED = "UNAUTHORIZED";
     public static String STOCK_NOT_VALID = "STOCK_NOT_VALID";
+    public static String VACCINATION_SESSION_ALREADY_BOOKED = "VACCINATION_SESSION_ALREADY_BOOKED";
+    public static String STOCK_EMPTY = "STOCK_EMPTY";
+    public static String CITIZEN_ALREADY_VACCINATED = "CITIZEN_ALREADY_VACCINATED";
 }
