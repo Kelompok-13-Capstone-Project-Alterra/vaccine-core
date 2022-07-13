@@ -77,7 +77,8 @@ public class AuthService {
                 .nik(usersRequest.getNik())
                 .name(usersRequest.getName())
                 .phoneNumber(usersRequest.getPhoneNumber())
-                .gender(usersRequest.getGender())
+                .gender(citizen.getGender())
+                .dateOfBirth(citizen.getDateOfBirth())
                 .active(true)
                 .password(passwordEncoder.encode(usersRequest.getPassword())).build();
         return usersRepository.save(users);

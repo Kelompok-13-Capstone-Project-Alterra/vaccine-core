@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @Data
 @Builder
@@ -24,4 +25,6 @@ public class CitizenResponse implements Serializable {
     private Long id;
     private String nik;
     private String name;
+    private Character gender;
+    private LocalDate dateOfBirth;
 }
