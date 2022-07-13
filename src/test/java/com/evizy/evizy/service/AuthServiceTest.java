@@ -8,6 +8,7 @@ import com.evizy.evizy.domain.dto.CitizenResponse;
 import com.evizy.evizy.domain.dto.TokenResponse;
 import com.evizy.evizy.domain.dto.UsersRequest;
 import com.evizy.evizy.errors.BusinessFlowException;
+import com.evizy.evizy.repository.AdminRepository;
 import com.evizy.evizy.repository.UsersRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,6 +33,9 @@ import static org.mockito.Mockito.when;
 class AuthServiceTest {
     @MockBean
     private UsersRepository usersRepository;
+
+    @MockBean
+    private AdminRepository adminRepository;
 
     @MockBean
     private PasswordEncoder passwordEncoder;

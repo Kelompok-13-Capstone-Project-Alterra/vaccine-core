@@ -5,7 +5,7 @@ import com.evizy.evizy.domain.dao.Users;
 import com.evizy.evizy.domain.dto.FamilyMembersRequest;
 import com.evizy.evizy.domain.dto.UsersRequest;
 import com.evizy.evizy.errors.BusinessFlowException;
-import com.evizy.evizy.service.AdminService;
+import com.evizy.evizy.service.AuthService;
 import com.evizy.evizy.service.FamilyMembersService;
 import com.evizy.evizy.service.UsersService;
 import com.evizy.evizy.util.Response;
@@ -23,14 +23,14 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/family-members")
 public class FamilyMembersController {
-    private final AdminService adminService;
     private final UsersService usersService;
+    private final AuthService authService;
     private final FamilyMembersService familyMembersService;
 
     @PostMapping("")
     public ResponseEntity<?> create(Principal principal, @RequestBody FamilyMembersRequest request) {
         try {
-            Users user = (Users) usersService.loadUserByUsername("user_" + principal.getName());
+            Users user = (Users) authService.getInfoByPrincipal("user_" + principal.getName());
 
             request.setUser(UsersRequest.builder()
                     .id(user.getId())
@@ -49,7 +49,7 @@ public class FamilyMembersController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(Principal principal, @PathVariable Long id) {
         try {
-            Users user = (Users) usersService.loadUserByUsername("user_" + principal.getName());
+            Users user = (Users) authService.getInfoByPrincipal("user_" + principal.getName());
             FamilyMembersRequest familyMembers = familyMembersService.find(id);
             if (!familyMembers.getUser().getId().equals(user.getId())) {
                 throw new BusinessFlowException(HttpStatus.UNAUTHORIZED, ResponseMessage.UNAUTHORIZED, "User not authorized to delete this family member.");
@@ -69,7 +69,7 @@ public class FamilyMembersController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(Principal principal, @PathVariable Long id, @RequestBody FamilyMembersRequest request) {
         try {
-            Users user = (Users) usersService.loadUserByUsername("user_" + principal.getName());
+            Users user = (Users) authService.getInfoByPrincipal("user_" + principal.getName());
             FamilyMembersRequest familyMembers = familyMembersService.find(id);
             if (!familyMembers.getUser().getId().equals(user.getId())) {
                 throw new BusinessFlowException(HttpStatus.UNAUTHORIZED, ResponseMessage.UNAUTHORIZED, "User not authorized to update this family member.");

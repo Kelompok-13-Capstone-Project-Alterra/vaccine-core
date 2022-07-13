@@ -10,7 +10,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 
 @Data
 @Builder
@@ -19,15 +18,12 @@ import java.time.LocalDate;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class FamilyMembersRequest implements Serializable {
-    private static final long serialVersionUID = -910933681134427230L;
+public class NewsRequest implements Serializable {
+    private static final long serialVersionUID = 6774673923664347911L;
 
     private Long id;
-    private UsersRequest user;
-    private String nik;
-    private String name;
-    private String phoneNumber;
-    private LocalDate dateOfBirth;
-    private Character gender;
-    private String relationship;
+    private String title;
+    private String description;
+    private String content;
+    private AdminsRequest admin;
 }

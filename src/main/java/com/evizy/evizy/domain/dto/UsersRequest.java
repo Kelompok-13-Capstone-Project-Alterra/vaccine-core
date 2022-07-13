@@ -9,10 +9,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.*;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
-import java.util.Set;
 
 @Data
 @Builder
@@ -33,5 +31,6 @@ public class UsersRequest implements Serializable {
     private String password;
 
     private String name;
+    private Character gender;
     private String phoneNumber;
 }
