@@ -221,8 +221,13 @@ public class VaccinationSessionService {
                 .build();
     }
 
-    public List<VaccinationSessionRequest> find() {
-        List<VaccinationSessions> vaccinationSessionsList = vaccinationSessionsRepository.findAll();
+    public List<VaccinationSessionRequest> findAll(Long cityId) {
+        List<VaccinationSessions> vaccinationSessionsList;
+        if (cityId == null) {
+            vaccinationSessionsList = vaccinationSessionsRepository.findAll();
+        } else {
+            vaccinationSessionsList = vaccinationSessionsRepository.findAllByHealthFacilityCityId(cityId);
+        }
         List<VaccinationSessionRequest> vaccinationSessionRequests = new ArrayList<>();
         for(VaccinationSessions vaccinationSessions : vaccinationSessionsList) {
             vaccinationSessionRequests.add(VaccinationSessionRequest.builder()

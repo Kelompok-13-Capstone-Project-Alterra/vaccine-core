@@ -107,9 +107,9 @@ public class VaccinationSessionController {
     }
 
     @GetMapping("")
-    public ResponseEntity<?> findAll() {
+    public ResponseEntity<?> findAll(@RequestParam(value = "city_id", required = false) Long cityId) {
         try {
-            List<VaccinationSessionRequest> vaccinationSessions = vaccinationSessionService.find();
+            List<VaccinationSessionRequest> vaccinationSessions = vaccinationSessionService.findAll(cityId);
             return Response.build(ResponseMessage.SUCCESS, HttpStatus.OK, vaccinationSessions);
         } catch (BusinessFlowException e) {
             return Response.build(e.getCode(), e.getHttpStatus(), null);
