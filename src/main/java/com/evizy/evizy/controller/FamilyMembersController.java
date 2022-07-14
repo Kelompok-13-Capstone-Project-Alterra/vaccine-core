@@ -9,12 +9,14 @@ import com.evizy.evizy.service.AuthService;
 import com.evizy.evizy.service.FamilyMembersService;
 import com.evizy.evizy.service.UsersService;
 import com.evizy.evizy.util.Response;
+import com.evizy.evizy.util.Validation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.ConstraintViolationException;
 import java.security.Principal;
 import java.util.List;
 
@@ -23,7 +25,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/family-members")
 public class FamilyMembersController {
-    private final UsersService usersService;
     private final AuthService authService;
     private final FamilyMembersService familyMembersService;
 
@@ -35,8 +36,13 @@ public class FamilyMembersController {
             request.setUser(UsersRequest.builder()
                     .id(user.getId())
                     .build());
+
+            Validation.validate(request);
+
             FamilyMembersRequest newFamilyMember = familyMembersService.create(request);
             return Response.build(ResponseMessage.SUCCESS, HttpStatus.CREATED, newFamilyMember);
+        } catch (ConstraintViolationException e) {
+            return Response.build(ResponseMessage.INVALID_INPUT, HttpStatus.BAD_REQUEST, null);
         } catch (BusinessFlowException e) {
             return Response.build(e.getCode(), e.getHttpStatus(), null);
         } catch (Exception e) {
@@ -75,8 +81,12 @@ public class FamilyMembersController {
                 throw new BusinessFlowException(HttpStatus.UNAUTHORIZED, ResponseMessage.UNAUTHORIZED, "User not authorized to update this family member.");
             }
 
+            Validation.validate(request);
+
             FamilyMembersRequest updatedFamilyMember = familyMembersService.update(id, request);
             return Response.build(ResponseMessage.SUCCESS, HttpStatus.OK, updatedFamilyMember);
+        } catch (ConstraintViolationException e) {
+            return Response.build(ResponseMessage.INVALID_INPUT, HttpStatus.BAD_REQUEST, null);
         } catch (BusinessFlowException e) {
             return Response.build(e.getCode(), e.getHttpStatus(), null);
         } catch (Exception e) {

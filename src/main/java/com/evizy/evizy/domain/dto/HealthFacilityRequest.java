@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
 @Data
@@ -25,6 +26,7 @@ public class HealthFacilityRequest implements Serializable {
     private static final long serialVersionUID = -8382189692562014825L;
 
     private Long id;
+    @Pattern(regexp = "^[a-zA-Z]+[a-zA-Z\\s\\.0-9]*[a-zA-Z0-9]+$")
     private String name;
 
     private AdminsRequest admin;
