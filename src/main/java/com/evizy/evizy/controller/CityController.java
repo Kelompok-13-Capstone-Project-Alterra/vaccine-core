@@ -8,12 +8,14 @@ import com.evizy.evizy.errors.BusinessFlowException;
 import com.evizy.evizy.service.AuthService;
 import com.evizy.evizy.service.CityService;
 import com.evizy.evizy.util.Response;
+import com.evizy.evizy.util.Validation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.ConstraintViolationException;
 import java.security.Principal;
 import java.util.List;
 
@@ -32,8 +34,12 @@ public class CityController {
             if (!admin.isSuperAdmin())
                 throw new BusinessFlowException(HttpStatus.UNAUTHORIZED, ResponseMessage.UNAUTHORIZED, "Unauthorized to create new city.");
 
+            Validation.validate(request);
+
             CityRequest newCity = cityService.create(request);
             return Response.build(ResponseMessage.SUCCESS, HttpStatus.CREATED, newCity);
+        } catch (ConstraintViolationException e) {
+            return Response.build(ResponseMessage.INVALID_INPUT, HttpStatus.BAD_REQUEST, null);
         } catch (BusinessFlowException e) {
             return Response.build(e.getCode(), e.getHttpStatus(), null);
         } catch (Exception e) {
@@ -68,8 +74,12 @@ public class CityController {
             if (!admin.isSuperAdmin())
                 throw new BusinessFlowException(HttpStatus.UNAUTHORIZED, ResponseMessage.UNAUTHORIZED, "Unauthorized to update city.");
 
+            Validation.validate(request);
+
             CityRequest updatedCity = cityService.update(id, request);
             return Response.build(ResponseMessage.SUCCESS, HttpStatus.OK, updatedCity);
+        } catch (ConstraintViolationException e) {
+            return Response.build(ResponseMessage.INVALID_INPUT, HttpStatus.BAD_REQUEST, null);
         } catch (BusinessFlowException e) {
             return Response.build(e.getCode(), e.getHttpStatus(), null);
         } catch (Exception e) {

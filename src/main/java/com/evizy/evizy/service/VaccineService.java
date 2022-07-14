@@ -22,6 +22,11 @@ public class VaccineService {
     private final VaccineRepository vaccineRepository;
 
     public VaccineRequest create(VaccineRequest request) throws BusinessFlowException {
+        Long countSimilarName = vaccineRepository.countAllVaccinesByLowerName(request.getName().toLowerCase());
+        if (countSimilarName > 0) {
+            throw new BusinessFlowException(HttpStatus.BAD_REQUEST, ResponseMessage.ALREADY_EXIST, "Vaccines with similar name is already exist!");
+        }
+
         Vaccine vaccine = Vaccine.builder()
                 .name(request.getName())
                 .build();

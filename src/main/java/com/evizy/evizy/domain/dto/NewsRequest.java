@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 @Data
@@ -22,8 +23,11 @@ public class NewsRequest implements Serializable {
     private static final long serialVersionUID = 6774673923664347911L;
 
     private Long id;
+    @NotBlank
     private String title;
+    @NotBlank
     private String description;
+    @NotBlank
     private String content;
     private AdminsRequest admin;
 }

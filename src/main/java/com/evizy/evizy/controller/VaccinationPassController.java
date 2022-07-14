@@ -7,12 +7,14 @@ import com.evizy.evizy.domain.dto.*;
 import com.evizy.evizy.errors.BusinessFlowException;
 import com.evizy.evizy.service.*;
 import com.evizy.evizy.util.Response;
+import com.evizy.evizy.util.Validation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.ConstraintViolationException;
 import java.security.Principal;
 import java.util.List;
 
@@ -34,8 +36,13 @@ public class VaccinationPassController {
             request.setRegisteredBy(UsersRequest.builder()
                     .id(user.getId())
                     .build());
+
+            Validation.validate(request);
+
             VaccinationPassRequest newVaccinationPass = vaccinationPassService.create(request);
             return Response.build(ResponseMessage.SUCCESS, HttpStatus.CREATED, newVaccinationPass);
+        } catch (ConstraintViolationException e) {
+            return Response.build(ResponseMessage.INVALID_INPUT, HttpStatus.BAD_REQUEST, null);
         } catch (BusinessFlowException e) {
             return Response.build(e.getCode(), e.getHttpStatus(), null);
         } catch (Exception e) {
@@ -76,8 +83,12 @@ public class VaccinationPassController {
                 throw new BusinessFlowException(HttpStatus.UNAUTHORIZED, ResponseMessage.UNAUTHORIZED, "User not authorized to update this vaccination pass.");
             }
 
+            Validation.validate(request);
+
             VaccinationPassRequest updatedVaccinationPass = vaccinationPassService.update(id, request);
             return Response.build(ResponseMessage.SUCCESS, HttpStatus.OK, updatedVaccinationPass);
+        } catch (ConstraintViolationException e) {
+            return Response.build(ResponseMessage.INVALID_INPUT, HttpStatus.BAD_REQUEST, null);
         } catch (BusinessFlowException e) {
             return Response.build(e.getCode(), e.getHttpStatus(), null);
         } catch (Exception e) {
