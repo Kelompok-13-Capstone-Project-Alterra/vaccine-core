@@ -8,12 +8,14 @@ import com.evizy.evizy.errors.BusinessFlowException;
 import com.evizy.evizy.service.AuthService;
 import com.evizy.evizy.service.NewsService;
 import com.evizy.evizy.util.Response;
+import com.evizy.evizy.util.Validation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.ConstraintViolationException;
 import java.security.Principal;
 import java.util.List;
 
@@ -31,11 +33,16 @@ public class NewsController {
             Admin admin = (Admin) authService.getInfoByPrincipal("admin_" + principal.getName());
             if (!admin.isSuperAdmin())
                 throw new BusinessFlowException(HttpStatus.UNAUTHORIZED, ResponseMessage.UNAUTHORIZED, "Unauthorized to create new news.");
+
+            Validation.validate(request);
+
             request.setAdmin(AdminsRequest.builder()
                     .id(admin.getId())
                     .build());
             NewsRequest newNews = newsService.create(request);
             return Response.build(ResponseMessage.SUCCESS, HttpStatus.CREATED, newNews);
+        } catch (ConstraintViolationException e) {
+            return Response.build(ResponseMessage.INVALID_INPUT, HttpStatus.BAD_REQUEST, null);
         } catch (BusinessFlowException e) {
             return Response.build(e.getCode(), e.getHttpStatus(), null);
         } catch (Exception e) {
@@ -70,8 +77,12 @@ public class NewsController {
             if (!admin.isSuperAdmin())
                 throw new BusinessFlowException(HttpStatus.UNAUTHORIZED, ResponseMessage.UNAUTHORIZED, "Unauthorized to update news.");
 
+            Validation.validate(request);
+
             NewsRequest updatedNews = newsService.update(id, request);
             return Response.build(ResponseMessage.SUCCESS, HttpStatus.OK, updatedNews);
+        } catch (ConstraintViolationException e) {
+            return Response.build(ResponseMessage.INVALID_INPUT, HttpStatus.BAD_REQUEST, null);
         } catch (BusinessFlowException e) {
             return Response.build(e.getCode(), e.getHttpStatus(), null);
         } catch (Exception e) {

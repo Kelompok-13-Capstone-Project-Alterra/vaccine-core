@@ -7,12 +7,14 @@ import com.evizy.evizy.domain.dto.*;
 import com.evizy.evizy.errors.BusinessFlowException;
 import com.evizy.evizy.service.*;
 import com.evizy.evizy.util.Response;
+import com.evizy.evizy.util.Validation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.ConstraintViolationException;
 import java.security.Principal;
 import java.util.List;
 
@@ -32,8 +34,12 @@ public class HealthFacilitiesController {
             if (!admin.isSuperAdmin())
                 throw new BusinessFlowException(HttpStatus.UNAUTHORIZED, ResponseMessage.UNAUTHORIZED, "Unauthorized to create new health facility.");
 
+            Validation.validate(request);
+
             HealthFacilityRequest newHealthFacility = healthFacilityService.create(request);
             return Response.build(ResponseMessage.SUCCESS, HttpStatus.CREATED, newHealthFacility);
+        } catch (ConstraintViolationException e) {
+            return Response.build(ResponseMessage.INVALID_INPUT, HttpStatus.BAD_REQUEST, null);
         } catch (BusinessFlowException e) {
             return Response.build(e.getCode(), e.getHttpStatus(), null);
         } catch (Exception e) {
@@ -68,8 +74,12 @@ public class HealthFacilitiesController {
             if (!admin.isSuperAdmin())
                 throw new BusinessFlowException(HttpStatus.UNAUTHORIZED, ResponseMessage.UNAUTHORIZED, "Unauthorized to update health facility.");
 
+            Validation.validate(request);
+
             HealthFacilityRequest updatedHealthFacility = healthFacilityService.update(id, request);
             return Response.build(ResponseMessage.SUCCESS, HttpStatus.OK, updatedHealthFacility);
+        } catch (ConstraintViolationException e) {
+            return Response.build(ResponseMessage.INVALID_INPUT, HttpStatus.BAD_REQUEST, null);
         } catch (BusinessFlowException e) {
             return Response.build(e.getCode(), e.getHttpStatus(), null);
         } catch (Exception e) {

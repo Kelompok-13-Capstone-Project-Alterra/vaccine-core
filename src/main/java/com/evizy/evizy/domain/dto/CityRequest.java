@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
 @Data
@@ -22,5 +23,7 @@ public class CityRequest implements Serializable {
     private static final long serialVersionUID = 2724387955308074749L;
 
     private Long id;
+
+    @Pattern(regexp = "^[a-zA-Z]+[a-zA-Z\\s]*[a-zA-Z]+$")
     private String name;
 }

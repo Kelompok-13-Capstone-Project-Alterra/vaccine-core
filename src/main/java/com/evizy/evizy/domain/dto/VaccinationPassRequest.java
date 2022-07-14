@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -36,6 +37,7 @@ public class VaccinationPassRequest implements Serializable {
     private char gender;
     private String landlinePhone;
     private String email;
+    @Pattern(regexp = "^[a-zA-Z]+[a-zA-Z\\s]*[a-zA-Z]+$")
     private String ageCategory;
 
     private Boolean isVaccinated;
@@ -43,15 +45,25 @@ public class VaccinationPassRequest implements Serializable {
     private String medicalHistory;
     private Boolean isPregnant;
 
+    @Pattern(regexp = "^[a-zA-Z]+[a-zA-Z\\s\\.0-9]*[a-zA-Z0-9]+$")
     private String idAddress;
+    @Pattern(regexp = "^[a-zA-Z]+[a-zA-Z\\s]*[a-zA-Z]+$")
     private String idUrbanVillage;
+    @Pattern(regexp = "^[a-zA-Z]+[a-zA-Z\\s]*[a-zA-Z]+$")
     private String idSubDistrict;
+    @Pattern(regexp = "^[a-zA-Z]+[a-zA-Z\\s]*[a-zA-Z]+$")
     private String idCity;
+    @Pattern(regexp = "^[a-zA-Z]+[a-zA-Z\\s]*[a-zA-Z]+$")
     private String idProvince;
 
+    @Pattern(regexp = "^[a-zA-Z]+[a-zA-Z\\s\\.0-9]*[a-zA-Z0-9]+$")
     private String currAddress;
+    @Pattern(regexp = "^[a-zA-Z]+[a-zA-Z\\s]*[a-zA-Z]+$")
     private String currUrbanVillage;
+    @Pattern(regexp = "^[a-zA-Z]+[a-zA-Z\\s]*[a-zA-Z]+$")
     private String currSubDistrict;
+    @Pattern(regexp = "^[a-zA-Z]+[a-zA-Z\\s]*[a-zA-Z]+$")
     private String currCity;
+    @Pattern(regexp = "^[a-zA-Z]+[a-zA-Z\\s]*[a-zA-Z]+$")
     private String currProvince;
 }

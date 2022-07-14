@@ -21,6 +21,11 @@ public class CityService {
     private final CityRepository cityRepository;
 
     public CityRequest create(CityRequest request) throws BusinessFlowException {
+        Long countSimilarName = cityRepository.countAllCitiesByLowerName(request.getName().toLowerCase());
+        if (countSimilarName > 0) {
+            throw new BusinessFlowException(HttpStatus.BAD_REQUEST, ResponseMessage.ALREADY_EXIST, "City with similar name is already exist!");
+        }
+
         City city = City.builder()
                 .name(request.getName())
                 .build();
