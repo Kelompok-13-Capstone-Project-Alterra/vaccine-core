@@ -38,7 +38,7 @@ public class AdminService {
         return AdminsRequest.builder()
                 .id(admin.getId())
                 .name(admin.getName())
-                .username(admin.getName())
+                .username(admin.getUsername())
                 .build();
     }
 
@@ -70,7 +70,7 @@ public class AdminService {
         return AdminsRequest.builder()
                 .id(admin.getId())
                 .name(admin.getName())
-                .username(admin.getName())
+                .username(admin.getUsername())
                 .build();
     }
 

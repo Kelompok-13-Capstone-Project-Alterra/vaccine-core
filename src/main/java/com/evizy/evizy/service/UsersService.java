@@ -81,13 +81,6 @@ public class UsersService implements UserDetailsService {
         return usersRequests;
     }
 
-    public void deleteUser(Long id) {
-        Optional<Users> optionalUsers = usersRepository.findById(id);
-        if (optionalUsers.isEmpty())
-            throw new BusinessFlowException(HttpStatus.BAD_REQUEST, ResponseMessage.BAD_REQUEST, "User not found!");
-        usersRepository.delete(optionalUsers.get());
-    }
-
     public List<CitizenResponse> getAllCitizen() {
         String url = Endpoints.API_CITIZEN_BASE_URL + "/api/v1/citizen";
         CitizenResponse[] lists = restTemplate.getForObject(url, CitizenResponse[].class);
