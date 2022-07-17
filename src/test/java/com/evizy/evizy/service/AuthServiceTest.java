@@ -3,6 +3,7 @@ package com.evizy.evizy.service;
 import com.evizy.evizy.config.JwtTokenProvider;
 import com.evizy.evizy.constant.ResponseMessage;
 import com.evizy.evizy.domain.common.ApiResponse;
+import com.evizy.evizy.domain.dao.Admin;
 import com.evizy.evizy.domain.dao.Users;
 import com.evizy.evizy.domain.dto.CitizenResponse;
 import com.evizy.evizy.domain.dto.TokenResponse;
@@ -18,6 +19,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -51,6 +53,48 @@ class AuthServiceTest {
 
     @Autowired
     private AuthService authService;
+
+    @Test
+    void loadAdminByUsernameSuccess_Test() {
+        when(adminRepository.getDistinctTopByUsername(any())).thenReturn(Admin.builder()
+                .id(1L)
+                .name("Admin")
+                .username("admin")
+                .build());
+
+        Admin admin = (Admin) authService.getInfoByPrincipal("admin_admin");
+        assertEquals("Admin", admin.getName());
+        assertEquals("admin", admin.getUsername());
+        assertEquals(1L, admin.getId());
+    }
+
+    @Test
+    void loadUserByNikSuccess_Test() {
+        when(usersRepository.getDistinctTopByNik(any())).thenReturn(Users.builder()
+                .id(1L)
+                .name("Users")
+                .nik("1234567890123456")
+                .build());
+
+        Users user = (Users) authService.getInfoByPrincipal("user_1234567890123456");
+        assertEquals("Users", user.getName());
+        assertEquals("1234567890123456", user.getNik());
+        assertEquals(1L, user.getId());
+    }
+
+    @Test
+    void loadUserByNikFail_Test() {
+        when(usersRepository.getDistinctTopByNik(any())).thenReturn(null);
+
+        try {
+            Users user = (Users) authService.getInfoByPrincipal("user_1234567890123456");
+            fail();
+        } catch (BusinessFlowException e) {
+
+        } catch (Exception e) {
+            fail();
+        }
+    }
 
     @Test
     void registerUsersSuccess_Test() {
